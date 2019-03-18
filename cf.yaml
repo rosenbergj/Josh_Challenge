@@ -6,6 +6,10 @@ Parameters:
         Default: samplewebpage.josh-rosenberg.com
 Resources:
     MyBucket:
+        # Bucket for the website.
+        #
+        # We're not using WebsiteConfiguration (s3 static website hosting)
+        # because of a lack of https support.
         Type: AWS::S3::Bucket
         Properties:
             BucketName: !Ref SiteFQDN
@@ -19,8 +23,8 @@ Resources:
                 BlockPublicPolicy: false
                 RestrictPublicBuckets: false
         DeletionPolicy: Delete
-
-    BucketPolicy:
+    MyBucketPolicy:
+        # Public access policy for the bucket
         Type: AWS::S3::BucketPolicy
         Properties:
             PolicyDocument:
