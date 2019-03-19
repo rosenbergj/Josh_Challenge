@@ -22,7 +22,13 @@ def toomanyconsecutive(ccnum):
 
 
 if __name__ == "__main__":
+    firstiteration = True
     for ccnum in map(str.rstrip, sys.stdin):
+        # first of all, throw away the first row of input
+        if firstiteration:
+            firstiteration = False
+            continue
+        # Now, validate the CC number
         if not looksvalid(ccnum):
             print("Invalid")
             continue
