@@ -197,3 +197,26 @@ Resources:
                         Configuration:
                             BucketName: !Ref SiteFQDN
                             Extract: true
+
+    MySNSTopic:
+        Type: AWS::SNS::Topic
+#    MySNSSub:
+#        Type: AWS::SNS::Subscription
+#        Properties:
+    MyAlarm:
+        Type: AWS::CloudWatch::Alarm
+        Properties:
+            AlarmName: SomeDistributionErrors
+            Namespace: AWS/CloudFront
+            MetricName: TotalErrorRate
+            Dimensions:
+                - Name: DistributionId
+                  Value: !Ref MyCFDistribution
+            ComparisonOperator: GreaterThanThreshold
+            Threshold: 10
+            EvaluationPeriods: 1
+            Period: 60
+            Statistic: Average
+            AlarmActions:
+                - !Ref MySNSTopic
+            TreatMissingData: notBreaching
