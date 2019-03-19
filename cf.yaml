@@ -47,41 +47,41 @@ Resources:
                             - !Ref MyBucket
                             - /*
             Bucket: !Ref MyBucket
-    MyCFAccessIdentity:
-        Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-        Properties:
-            CloudFrontOriginAccessIdentityConfig:
-                Comment: "Here is my OAIC"
-    MyCFDistribution:
-        Type: AWS::CloudFront::Distribution
-        Properties:
-            DistributionConfig:
-                Origins:
-                    - Id: MyS3Origin
-                      DomainName: !Join
-                        - ''
-                        - - !Ref MyBucket
-                          - '.s3.amazonaws.com'
-                      S3OriginConfig:
-                          OriginAccessIdentity: !Join
-                            - ''
-                            - - 'origin-access-identity/cloudfront/'
-                              - !Ref MyCFAccessIdentity
-
-                Aliases:
-                    - !Ref SiteFQDN
-                DefaultRootObject: index.html
-                # Would include logging here if required by specification
-                PriceClass: PriceClass_100
-                DefaultCacheBehavior:
-                    TargetOriginId: MyS3Origin
-                    ViewerProtocolPolicy: redirect-to-https # why we're using cloudfront at all
-                    DefaultTTL: 60
-                    ForwardedValues:
-                        QueryString: false
-                ViewerCertificate:
-                    CloudFrontDefaultCertificate: true #to be changed
-                Enabled: true
+#    MyCFAccessIdentity:
+#        Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+#        Properties:
+#            CloudFrontOriginAccessIdentityConfig:
+#                Comment: "Here is my OAIC"
+#    MyCFDistribution:
+#        Type: AWS::CloudFront::Distribution
+#        Properties:
+#            DistributionConfig:
+#                Origins:
+#                    - Id: MyS3Origin
+#                      DomainName: !Join
+#                        - ''
+#                        - - !Ref MyBucket
+#                          - '.s3.amazonaws.com'
+#                      S3OriginConfig:
+#                          OriginAccessIdentity: !Join
+#                            - ''
+#                            - - 'origin-access-identity/cloudfront/'
+#                              - !Ref MyCFAccessIdentity
+#
+#                Aliases:
+#                    - !Ref SiteFQDN
+#                DefaultRootObject: index.html
+#                # Would include logging here if required by specification
+#                PriceClass: PriceClass_100
+#                DefaultCacheBehavior:
+#                    TargetOriginId: MyS3Origin
+#                    ViewerProtocolPolicy: redirect-to-https # why we're using cloudfront at all
+#                    DefaultTTL: 60
+#                    ForwardedValues:
+#                        QueryString: false
+#                ViewerCertificate:
+#                    CloudFrontDefaultCertificate: true #to be changed
+#                Enabled: true
     MyIAMPipelineRole:
         Type: 'AWS::IAM::Role'
         Properties:
