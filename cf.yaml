@@ -5,21 +5,11 @@ Parameters:
         Type: String
         Default: samplewebpage.josh-rosenberg.com
     BranchName:
-        Description: GitHub branch name
         Type: String
         Default: master
     RepositoryName:
-        Description: GitHub repository name
         Type: String
-        Default: rosenbergj/helloworld
-    GitHubOwner:
-        Type: String
-    GitHubSecret:
-        Type: String
-        NoEcho: true
-    GitHubOAuthToken:
-        Type: String
-        NoEcho: true
+        Default: helloworld
 Resources:
     MyBucket:
         # Bucket for the website.
@@ -111,6 +101,14 @@ Resources:
                 Statement:
                   - Effect: Allow
                     Action:
+                      - 'codecommit:CancelUploadArchive'
+                      - 'codecommit:GetBranch'
+                      - 'codecommit:GetCommit'
+                      - 'codecommit:GetUploadArchiveStatus'
+                      - 'codecommit:UploadArchive'
+                    Resource: '*'
+                  - Effect: Allow
+                    Action:
                       - 'codedeploy:CreateDeployment'
                       - 'codedeploy:GetApplicationRevision'
                       - 'codedeploy:GetDeployment'
@@ -126,22 +124,6 @@ Resources:
                       - 'cloudwatch:*'
                       - 's3:*'
                     Resource: '*'
-    MyPipelineWebhook:
-        Type: 'AWS::CodePipeline::Webhook'
-        Properties:
-          Authentication: GITHUB_HMAC
-          AuthenticationConfiguration:
-            SecretToken: !Ref GitHubSecret
-          Filters:
-            - JsonPath: $.ref
-              MatchEquals: 'refs/heads/{Branch}'
-          TargetPipeline: !Ref MyPipeline
-          TargetAction: GithubSource
-          Name: MyPipelineWebhook
-          TargetPipelineVersion: !GetAtt
-            - MyPipeline
-            - Version
-          RegisterWithThirdParty: true
     MyPipelineBucket:
         Type: 'AWS::S3::Bucket'
     MyPipelineArtifactStoreBucketPolicy:
@@ -191,19 +173,17 @@ Resources:
             Stages:
                 - Name: Source
                   Actions:
-                      - Name: GithubSource
+                      - Name: CodeCommitSource
                         ActionTypeId:
                             Category: Source
-                            Owner: ThirdParty
+                            Owner: AWS
                             Version: 1
-                            Provider: GitHub
+                            Provider: CodeCommit
                         OutputArtifacts:
                             - Name: HelloZip
                         Configuration:
-                            Owner: !Ref GitHubOwner
-                            Repo: !Ref RepositoryName
-                            Branch: !Ref BranchName
-                            OAuthToken: !Ref GitHubOAuthToken
+                            RepositoryName: !Ref RepositoryName
+                            BranchName: !Ref BranchName
                             PollForSourceChanges: false
                         RunOrder: 1
                 - Name: Deploy
