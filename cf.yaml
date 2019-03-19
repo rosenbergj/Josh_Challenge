@@ -212,6 +212,8 @@ Resources:
             Dimensions:
                 - Name: DistributionId
                   Value: !Ref MyCFDistribution
+                - Name: Region
+                  Value: Global
             ComparisonOperator: GreaterThanThreshold
             Threshold: 10
             EvaluationPeriods: 1
