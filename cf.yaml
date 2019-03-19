@@ -88,7 +88,9 @@ Resources:
                     ForwardedValues:
                         QueryString: false
                 ViewerCertificate:
-                    CloudFrontDefaultCertificate: true #to be changed
+                    AcmCertificateArn: !Ref MyCFCert
+                    MinimumProtocolVersion: TLSv1.1_2016
+                    SslSupportMethod: sni-only
                 Enabled: true
     MyIAMPipelineRole:
         Type: 'AWS::IAM::Role'
