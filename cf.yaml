@@ -10,6 +10,9 @@ Parameters:
     RepositoryName:
         Type: String
         Default: helloworld
+    MyPhoneNumber:
+        Type: String
+#        Default: '+1xxxyyyzzzz'
 Resources:
     MyBucket:
         # Bucket for the website.
@@ -200,9 +203,12 @@ Resources:
 
     MySNSTopic:
         Type: AWS::SNS::Topic
-#    MySNSSub:
-#        Type: AWS::SNS::Subscription
-#        Properties:
+    MySNSSub:
+        Type: AWS::SNS::Subscription
+        Properties:
+            TopicArn: !Ref MySNSTopic
+            Protocol: sms
+            Endpoint: !Ref MyPhoneNumber
     MyAlarm:
         Type: AWS::CloudWatch::Alarm
         Properties:
