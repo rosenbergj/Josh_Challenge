@@ -57,7 +57,7 @@ Resources:
                 # Would include logging here if required by specification
                 PriceClass: PriceClass_100
                 DefaultCacheBehavior:
-                    TargetOriginID: MyS3Origin
+                    TargetOriginId: MyS3Origin
                     ViewerProtocolPolicy: redirect-to-https # why we're using cloudfront at all
                     DefaultTTL: 60
                     ForwardedValues:
