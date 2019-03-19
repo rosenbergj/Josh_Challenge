@@ -16,7 +16,7 @@ Resources:
             BucketEncryption:
                 ServerSideEncryptionConfiguration:
                     - ServerSideEncryptionByDefault:
-                        SSEAlgorithm: AES256
+                          SSEAlgorithm: AES256
             PublicAccessBlockConfiguration:
                 BlockPublicAcls: true
                 IgnorePublicAcls: true
@@ -41,3 +41,22 @@ Resources:
                             - !Ref MyBucket
                             - /*
             Bucket: !Ref MyBucket
+    MyCFDistribution:
+        Type: AWS::CloudFront::Distribution
+        Properties:
+            DistributionConfig:
+                Origins:
+                    - Id: MyS3Origin
+                      DomainName: !Join
+                        - ''
+                        - - !Ref MyBucket
+                          - '.s3.amazonaws.com'
+                Aliases:
+                    - !Ref SiteFQDN
+                DefaultRootObject: index.html
+                PriceClass: 
+                DefaultCacheBehavior: 
+                ViewerCertificate: 
+                # Would include logging here if required by specification
+                Enabled: true
+
