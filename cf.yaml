@@ -184,8 +184,6 @@ Resources:
                         Configuration:
                             RepositoryName: !Ref RepositoryName
                             BranchName: !Ref BranchName
-                            PollForSourceChanges: false
-                        RunOrder: 1
                 - Name: Deploy
                   Actions:
                       - Name: DeployToS3
