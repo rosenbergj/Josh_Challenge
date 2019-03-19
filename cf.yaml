@@ -41,6 +41,11 @@ Resources:
                             - !Ref MyBucket
                             - /*
             Bucket: !Ref MyBucket
+    MyCFAccessIdentity:
+        Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+        Properties:
+            CloudFrontOriginAccessIdentityConfig:
+                Comment: "Here is my OAIC"
     MyCFDistribution:
         Type: AWS::CloudFront::Distribution
         Properties:
@@ -51,6 +56,12 @@ Resources:
                         - ''
                         - - !Ref MyBucket
                           - '.s3.amazonaws.com'
+                      S3OriginConfig:
+                          OriginAccessIdentity: !Join
+                            - ''
+                            - - 'origin-access-identity/cloudfront/'
+                              - !Ref MyCFAccessIdentity
+
                 Aliases:
                     - !Ref SiteFQDN
                 DefaultRootObject: index.html
@@ -65,4 +76,3 @@ Resources:
                 ViewerCertificate:
                     CloudFrontDefaultCertificate: true #to be changed
                 Enabled: true
-
