@@ -50,6 +50,11 @@ Resources:
                             - !Ref MyBucket
                             - /*
             Bucket: !Ref MyBucket
+    MyCFCert:
+        Type: AWS::CertificateManager::Certificate
+        Properties:
+            DomainName: !Ref SiteFQDN
+            ValidationMethod: DNS
     MyCFAccessIdentity:
         Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
         Properties:
