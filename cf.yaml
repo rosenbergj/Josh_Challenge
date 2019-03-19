@@ -54,9 +54,15 @@ Resources:
                 Aliases:
                     - !Ref SiteFQDN
                 DefaultRootObject: index.html
-                PriceClass: 
-                DefaultCacheBehavior: 
-                ViewerCertificate: 
                 # Would include logging here if required by specification
+                PriceClass: PriceClass_100
+                DefaultCacheBehavior:
+                    TargetOriginID: MyS3Origin
+                    ViewerProtocolPolicy: redirect-to-https # why we're using cloudfront at all
+                    DefaultTTL: 60
+                    ForwardedValues:
+                        QueryString: false
+                ViewerCertificate:
+                    CloudFrontDefaultCertificate: true #to be changed
                 Enabled: true
 
