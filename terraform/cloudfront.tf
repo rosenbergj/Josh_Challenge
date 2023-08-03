@@ -3,20 +3,18 @@ resource "aws_acm_certificate" "website" {
   validation_method = "DNS"
 }
 
-# Cloudfront OAI
-#TODO: Replace with origin access contril
-resource "aws_cloudfront_origin_access_identity" "website" {
-  comment = "Here is my OAI"
+resource "aws_cloudfront_origin_access_control" "s3_website_distribution" {
+  name                              = "helloworld-origin-control"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always"
+  signing_protocol                  = "sigv4"
 }
 
 resource "aws_cloudfront_distribution" "s3_website_distribution" {
   origin {
     domain_name = "${var.fqdn}.s3.amazonaws.com"
     origin_id   = "MyS3Origin"
-    # origin_access_identity = aws_cloudfront_origin_access_identity.website.cloudfront_access_identity_path
-    s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.website.cloudfront_access_identity_path
-    }
+    origin_access_control_id = aws_cloudfront_origin_access_control.s3_website_distribution.id
   }
 
   enabled             = true

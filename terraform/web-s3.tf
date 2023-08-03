@@ -22,21 +22,24 @@ resource "aws_s3_bucket_public_access_block" "website" {
 }
 
 data "aws_iam_policy_document" "website_bucket_policy" {
-  policy_id = "BucketPolicy"
+  policy_id = "PolicyForCloudFrontPrivateContent"
   statement {
-    sid = "PublicReadForGetBucketObjects"
+    sid = "AllowCloudFrontServicePrincipal"
     principals {
-      type        = "*"
-      identifiers = ["*"]
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
     }
-
     actions = [
       "s3:GetObject",
     ]
-
     resources = [
       "${aws_s3_bucket.website.arn}/*",
     ]
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.s3_website_distribution.arn]
+    }
   }
 }
 
